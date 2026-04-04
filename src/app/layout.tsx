@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Santiago Israelevich — UX Portfolio",
-  description: "Portfolio UX de Santiago Israelevich. Case studies de Totalcoin, EntrenadorPro, MercadoGasolinero y AoElec.",
+  description:
+    "Portfolio UX de Santiago Israelevich. Case studies de Totalcoin, EntrenadorPro, MercadoGasolinero y AoElec.",
 };
 
 export default function RootLayout({
@@ -24,10 +25,12 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang="es"
+      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-background text-foreground">
+        {children}
+      </body>
     </html>
   );
 }
