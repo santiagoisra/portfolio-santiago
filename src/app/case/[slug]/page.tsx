@@ -25,8 +25,13 @@ export async function generateMetadata({
   const study = caseStudies.find((s) => s.slug === slug);
   if (!study) return { title: "Not found" };
   return {
-    title: `${study.title} — Santiago Israelevich`,
+    title: `${study.title} — Case Study UX`,
     description: study.summary,
+    openGraph: {
+      title: `${study.title} — Santiago Israelevich UX Portfolio`,
+      description: study.summary,
+      images: [`/images/projects/${study.slug}.png`],
+    },
   };
 }
 
