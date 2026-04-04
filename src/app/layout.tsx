@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = "https://portfolio-santiago-cyan.vercel.app";
+const siteUrl = "https://santiago-israelevich.vercel.app";
 
 export const metadata: Metadata = {
   title: {

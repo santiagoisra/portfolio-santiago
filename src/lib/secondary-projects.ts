@@ -8,6 +8,14 @@ export interface SecondaryProject {
 
 export const secondaryProjects: SecondaryProject[] = [
   {
+    title: "Columbia Construcciones",
+    description:
+      "Sitio corporativo para empresa de construccion. Proyecto en desarrollo con foco en posicionamiento institucional y presentacion de obras.",
+    url: "https://columbia-construcciones.vercel.app",
+    tags: ["Web", "Construccion", "Corporativo", "En desarrollo"],
+    year: "2026",
+  },
+  {
     title: "Totalcoin.com.ar",
     description:
       "Sitio institucional fintech B2B bilingue (ES/EN). Ecosistema complejo de productos de pagos, cobranzas y productos financieros organizado en un recorrido claro.",
