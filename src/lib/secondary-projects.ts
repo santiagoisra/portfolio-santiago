@@ -21,7 +21,7 @@ export const secondaryProjects: SecondaryProject[] = [
       "Sitio institucional fintech B2B bilingue (ES/EN). Ecosistema complejo de productos de pagos, cobranzas y productos financieros organizado en un recorrido claro.",
     url: "https://totalcoin.com.ar",
     tags: ["Web", "Fintech", "B2B", "Bilingue"],
-    year: "2023",
+    year: "2025",
   },
   {
     title: "Steinraiser",
@@ -29,7 +29,7 @@ export const secondaryProjects: SecondaryProject[] = [
       "Sitio profesional para abogada laboralista. Microservicio de calculo de indemnizacion integrado como recurso gratuito y disparador de consultas.",
     url: "https://steinraiser.com.ar",
     tags: ["Web", "Legal", "Microservicio"],
-    year: "2024",
+    year: "2025",
   },
   {
     title: "Artefinal",
@@ -61,7 +61,7 @@ export const secondaryProjects: SecondaryProject[] = [
       "OnePage para entrenador personal al aire libre. Diseno dinamico con foco en energia, confianza y conversion via WhatsApp.",
     url: "https://entrenaendevoto.com.ar",
     tags: ["Web", "Fitness", "Landing"],
-    year: "2024",
+    year: "2026",
   },
   {
     title: "Saintgall",
@@ -85,7 +85,7 @@ export const secondaryProjects: SecondaryProject[] = [
       "Sitio institucional con estetica SaaS para estudio de producto digital propio. Recorrido pensado para CTOs, founders y PMs.",
     url: "https://cataliza.ar",
     tags: ["Web", "SaaS", "Marca propia"],
-    year: "2024",
+    year: "2025",
   },
   {
     title: "Automundo Slot",
@@ -93,7 +93,7 @@ export const secondaryProjects: SecondaryProject[] = [
       "Ecommerce especializado en slot 1/32 para publico tecnico y fanatico. Arquitectura de informacion para catalogo enorme con busqueda rapida.",
     url: "https://automundoslot.com",
     tags: ["E-commerce", "Catalogo"],
-    year: "2024",
+    year: "2022",
   },
   {
     title: "EGA Imagen",
@@ -101,7 +101,7 @@ export const secondaryProjects: SecondaryProject[] = [
       "Sitio corporativo para empresa de carteleria y senaletica en gran formato. Recorrido ejecutivo para gerentes de marketing y retail.",
     url: "https://egaimagen.com",
     tags: ["Web", "Corporativo", "Industrial"],
-    year: "2024",
+    year: "2021",
   },
   {
     title: "Proyecto PSI",
@@ -109,7 +109,7 @@ export const secondaryProjects: SecondaryProject[] = [
       "Sitio para estudio de psicologia pensado para generar confianza inmediata y reducir ansiedad del visitante. Lenguaje cercano y acceso directo a turnos.",
     url: "https://proyecto-psi.com.ar",
     tags: ["Web", "Salud", "Landing"],
-    year: "2024",
+    year: "2020",
   },
   {
     title: "Sentire Almagro (Bairex)",
