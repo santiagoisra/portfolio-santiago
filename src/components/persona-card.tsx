@@ -17,7 +17,9 @@ export function PersonaCard({ persona }: { persona: Persona }) {
               {persona.name[0]}
             </div>
             <div>
-              <p className="font-semibold text-sm">{persona.name}, {persona.age}</p>
+              <p className="font-semibold text-sm">
+                {persona.name}{persona.age !== undefined ? `, ${persona.age}` : ""}
+              </p>
               <p className="text-xs text-muted-foreground">{persona.occupation}</p>
             </div>
           </div>
@@ -27,9 +29,11 @@ export function PersonaCard({ persona }: { persona: Persona }) {
         </Badge>
       </div>
 
-      <blockquote className="text-sm italic text-muted-foreground border-l-2 border-zinc-700 pl-3">
-        &ldquo;{persona.quote}&rdquo;
-      </blockquote>
+      {persona.quote && (
+        <blockquote className="text-sm italic text-muted-foreground border-l-2 border-zinc-700 pl-3">
+          &ldquo;{persona.quote}&rdquo;
+        </blockquote>
+      )}
 
       <div className="grid grid-cols-2 gap-4">
         <div>

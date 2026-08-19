@@ -11,18 +11,16 @@ export function MetricsGrid({ metrics }: { metrics: Metric[] }) {
           <p className="text-xs text-muted-foreground mb-4">{metric.label}</p>
           <div className="flex items-end justify-between gap-4">
             <div className="flex items-baseline gap-2">
-              <span className="text-xs text-zinc-500 line-through">{metric.before}</span>
+              {metric.before && (
+                <span className="text-xs text-zinc-500 line-through">{metric.before}</span>
+              )}
               <span className="text-xl font-bold">{metric.after}</span>
             </div>
-            <span
-              className={`text-sm font-mono font-bold ${
-                metric.improvement.startsWith("+") || metric.improvement === "Excelente"
-                  ? "text-emerald-400"
-                  : "text-emerald-400"
-              }`}
-            >
-              {metric.improvement}
-            </span>
+            {metric.improvement && (
+              <span className="text-sm font-mono font-bold text-emerald-400">
+                {metric.improvement}
+              </span>
+            )}
           </div>
         </div>
       ))}

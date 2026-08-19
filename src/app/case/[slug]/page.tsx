@@ -294,19 +294,21 @@ export default async function CaseStudyPage({
             <SectionHeader number="05" title="Resultados" />
 
             {/* Impact Banner */}
-            <div className="mb-8">
-              <ImpactBanner
-                stats={study.results.metrics.slice(0, 4).map((m) => {
-                  const num = parseInt(m.improvement.replace(/[^0-9]/g, ""), 10);
-                  return {
-                    value: isNaN(num) ? 0 : num,
-                    suffix: m.improvement.startsWith("+") ? "%" : "%",
-                    label: m.label,
-                  };
-                }).filter((s) => s.value > 0)}
-                accentColor={study.heroColor}
-              />
-            </div>
+            {study.results.metrics.some((metric) => metric.improvement) && (
+              <div className="mb-8">
+                <ImpactBanner
+                  stats={study.results.metrics.slice(0, 4).map((m) => {
+                    const num = parseInt(m.improvement?.replace(/[^0-9]/g, "") ?? "", 10);
+                    return {
+                      value: isNaN(num) ? 0 : num,
+                      suffix: m.improvement?.startsWith("+") ? "%" : "%",
+                      label: m.label,
+                    };
+                  }).filter((s) => s.value > 0)}
+                  accentColor={study.heroColor}
+                />
+              </div>
+            )}
 
             <MetricsGrid metrics={study.results.metrics} />
 

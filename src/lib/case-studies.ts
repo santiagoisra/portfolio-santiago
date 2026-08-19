@@ -38,9 +38,9 @@ export interface InsightSection {
 
 export interface Persona {
   name: string;
-  age: number;
+  age?: number;
   occupation: string;
-  quote: string;
+  quote?: string;
   goals: string[];
   frustrations: string[];
   techLevel: "bajo" | "medio" | "alto";
@@ -67,12 +67,159 @@ export interface ResultsSection {
 
 export interface Metric {
   label: string;
-  before: string;
+  before?: string;
   after: string;
-  improvement: string;
+  improvement?: string;
 }
 
 export const caseStudies: CaseStudy[] = [
+  {
+    slug: "nitidoc",
+    title: "Nitidoc",
+    subtitle:
+      "Escáner de documentos privado y offline, sin suscripción ni marca de agua",
+    role: "Product designer & developer",
+    year: "2026",
+    duration: "En desarrollo · Próximo lanzamiento público en Google Play",
+    url: "https://nitidoc.com",
+    heroColor: "from-teal-500/20 to-cyan-500/10",
+    tags: ["PWA", "Privacy by design", "Computer Vision", "Mobile", "Open Source"],
+    summary:
+      "Diseñé y desarrollo un escáner de documentos que detecta bordes, corrige perspectiva y exporta PDFs multipágina directamente en el dispositivo. Ya se puede usar en la web desde dispositivos móviles —incluidos iPhone, iPad y Android—; el lanzamiento público en Google Play está previsto próximamente. No requiere cuenta, no incluye anuncios y ningún documento se sube a un servidor.",
+    challenge:
+      "Las apps de escaneo suelen convertir funciones básicas —como exportar sin marca de agua, usar varias páginas o trabajar offline— en pagos recurrentes, mientras los documentos sensibles viajan a servicios externos. El desafío fue resolver el flujo completo de escaneo sin backend, sin sacrificar una experiencia ágil en teléfonos.",
+    research: {
+      methods: [
+        "Auditoría de productos de escaneo",
+        "Prototipado y pruebas en navegador",
+        "Pruebas unitarias",
+        "Pruebas end-to-end",
+        "Validación en dispositivos reales",
+      ],
+      description:
+        "El proyecto se orientó por una restricción de producto explícita: los documentos deben permanecer en el dispositivo. La validación se enfocó en los estados críticos del flujo —cámara, permisos, importación, detección, ajuste manual y exportación— con pruebas automatizadas y verificación en dispositivos reales.",
+      findings: [
+        {
+          title: "La privacidad debía ser una propiedad de la arquitectura",
+          description:
+            "La detección de bordes, la corrección de perspectiva, los filtros y la creación del PDF se ejecutan localmente. No hay backend al que enviar imágenes o documentos.",
+          severity: "critical",
+        },
+        {
+          title: "La automatización necesita una salida manual confiable",
+          description:
+            "La detección automática puede fallar según luz, enfoque o encuadre. Por eso el flujo permite importar imágenes y ajustar las esquinas manualmente antes de procesar.",
+          severity: "high",
+        },
+        {
+          title: "El procesamiento no puede interrumpir la captura",
+          description:
+            "OpenCV se ejecuta en un Web Worker con OffscreenCanvas y buffers transferibles para mantener fluida la vista de cámara mientras se analiza la imagen.",
+          severity: "high",
+        },
+      ],
+    },
+    insights: {
+      personas: [
+        {
+          name: "Documentos sensibles",
+          occupation: "Personas que digitalizan contratos, facturas, recetas o identificaciones",
+          goals: [
+            "Crear un PDF legible desde el teléfono",
+            "Mantener el documento fuera de servidores externos",
+            "Compartir el resultado sin una cuenta",
+          ],
+          frustrations: [
+            "Marcas de agua y límites de páginas",
+            "Registros obligatorios antes de usar la herramienta",
+            "No saber dónde termina almacenado el documento",
+          ],
+          techLevel: "medio",
+        },
+        {
+          name: "Escaneo en contexto",
+          occupation: "Personas que necesitan escanear fuera de una conexión confiable",
+          goals: [
+            "Capturar varias páginas consecutivas",
+            "Corregir una foto tomada en ángulo",
+            "Revisar, reordenar y exportar cuando esté listo",
+          ],
+          frustrations: [
+            "Permisos de cámara rechazados o no disponibles",
+            "Detección automática imperfecta",
+            "Flujos que bloquean el trabajo sin conexión",
+          ],
+          techLevel: "medio",
+        },
+      ],
+      journeyMapSteps: [
+        {
+          phase: "Inicio",
+          action: "Abre Nitidoc sin crear una cuenta",
+          emotion: "positiva",
+        },
+        {
+          phase: "Captura",
+          action: "Usa la cámara o importa una imagen existente",
+          emotion: "neutral",
+          opportunity: "Mantener una alternativa útil si no se concede permiso de cámara",
+        },
+        {
+          phase: "Detección",
+          action: "La app identifica los bordes de la página",
+          emotion: "positiva",
+        },
+        {
+          phase: "Ajuste",
+          action: "Corrige el recorte o el filtro si lo necesita",
+          emotion: "neutral",
+          opportunity: "Combinar automatización con control manual preciso",
+        },
+        {
+          phase: "Documento",
+          action: "Reordena, elimina o agrega páginas",
+          emotion: "positiva",
+        },
+        {
+          phase: "Exportación",
+          action: "Genera y comparte el PDF desde el dispositivo",
+          emotion: "positiva",
+        },
+      ],
+    },
+    design: {
+      description:
+        "La experiencia se construyó como una secuencia breve y reversible: capturar, ajustar, revisar y exportar. Los fotogramas originales se conservan intactos; recorte, rotación y filtros se representan como una receta editable, lo que permite volver atrás y reexportar sin volver a fotografiar el documento.",
+      iterations: 5,
+      keyDecisions: [
+        "Arquitectura local-first: ninguna captura necesita salir del teléfono para detectarse, corregirse o convertirse en PDF",
+        "Procesamiento de visión en un Web Worker para no bloquear la interacción ni la previsualización de cámara",
+        "Editor manual de esquinas como alternativa cuando la detección automática no logra un resultado confiable",
+        "Flujo multipágina con reordenamiento, eliminación y nueva captura antes de la exportación",
+        "PWA instalable y disponible offline, con interfaz en español e inglés",
+      ],
+    },
+    results: {
+      metrics: [
+        {
+          label: "Procesamiento del documento",
+          after: "En el dispositivo",
+        },
+        {
+          label: "Documentos enviados a un servidor",
+          after: "0",
+        },
+        {
+          label: "Exportación multipágina",
+          after: "Hasta 30 páginas por PDF",
+        },
+        {
+          label: "Idiomas de la interfaz",
+          after: "ES / EN",
+        },
+      ],
+    },
+  },
   {
     slug: "totalcoin",
     title: "Totalcoin",
