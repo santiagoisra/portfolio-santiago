@@ -104,7 +104,6 @@ export const caseStudies: CaseStudy[] = [
     duration: "En producción · herramientas-web.com",
     url: "https://herramientas-web.com",
     heroColor: "from-teal-500/20 to-violet-500/10",
-    image: false,
     highlight: true,
     tags: [
       "Privacy by design",
