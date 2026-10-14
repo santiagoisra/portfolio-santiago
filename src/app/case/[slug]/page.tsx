@@ -11,6 +11,7 @@ import { JourneyMap } from "@/components/journey-map";
 import { FindingsList } from "@/components/findings-list";
 import { MetricsGrid } from "@/components/metrics-grid";
 import { ImpactBanner } from "@/components/impact-banner";
+import { AnimateOnScroll } from "@/components/animate-on-scroll";
 
 export function generateStaticParams() {
   return caseStudies.map((s) => ({ slug: s.slug }));
@@ -123,23 +124,23 @@ export default async function CaseStudyPage({
       <main className="px-6 md:px-12 lg:px-24 py-16">
         <div className="max-w-4xl mx-auto space-y-24">
           {/* Overview */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="00" title="Resumen" />
             <p className="text-muted-foreground leading-relaxed">{study.summary}</p>
-          </section>
+          </section></AnimateOnScroll>
 
           {/* Challenge */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="01" title="El desafío" />
             <p className="text-muted-foreground leading-relaxed text-lg">
               {study.challenge}
             </p>
-          </section>
+          </section></AnimateOnScroll>
 
           <Separator className="bg-border/30" />
 
           {/* Research */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="02" title="Investigación" />
             <p className="text-muted-foreground leading-relaxed mb-8">
               {study.research.description}
@@ -211,12 +212,12 @@ export default async function CaseStudyPage({
                 />
               </div>
             )}
-          </section>
+          </section></AnimateOnScroll>
 
           <Separator className="bg-border/30" />
 
           {/* Insights */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="03" title="Insights" />
 
             {/* Personas */}
@@ -231,12 +232,12 @@ export default async function CaseStudyPage({
 
             {/* Journey Map */}
             <JourneyMap steps={study.insights.journeyMapSteps} />
-          </section>
+          </section></AnimateOnScroll>
 
           <Separator className="bg-border/30" />
 
           {/* Design */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="04" title="Diseño e iteraciones" />
             <p className="text-muted-foreground leading-relaxed mb-8">
               {study.design.description}
@@ -285,12 +286,12 @@ export default async function CaseStudyPage({
                 </div>
               ))}
             </div>
-          </section>
+          </section></AnimateOnScroll>
 
           <Separator className="bg-border/30" />
 
           {/* Results */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="05" title="Resultados" />
 
             {/* Impact Banner */}
@@ -319,10 +320,10 @@ export default async function CaseStudyPage({
                 </p>
               </blockquote>
             )}
-          </section>
+          </section></AnimateOnScroll>
 
           {/* Next case study */}
-          <section className="pt-8">
+          <AnimateOnScroll><section className="pt-8">
             <Separator className="bg-border/30 mb-12" />
             <Link
               href={`/case/${nextStudy.slug}`}
@@ -341,7 +342,7 @@ export default async function CaseStudyPage({
               </div>
               <ArrowLeft className="h-5 w-5 rotate-180 text-muted-foreground group-hover:translate-x-1 transition-transform" />
             </Link>
-          </section>
+          </section></AnimateOnScroll>
         </div>
       </main>
     </div>
