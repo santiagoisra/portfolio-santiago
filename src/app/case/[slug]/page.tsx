@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, ExternalLink, Clock, Users } from "lucide-react";
-import { caseStudies } from "@/lib/case-studies";
+import { caseStudies, getCaseImage } from "@/lib/case-studies";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { SUSChart } from "@/components/sus-chart";
@@ -11,6 +11,8 @@ import { JourneyMap } from "@/components/journey-map";
 import { FindingsList } from "@/components/findings-list";
 import { MetricsGrid } from "@/components/metrics-grid";
 import { ImpactBanner } from "@/components/impact-banner";
+import { AnimateOnScroll } from "@/components/animate-on-scroll";
+import { ToolGridMock } from "@/components/tool-grid-mock";
 
 export function generateStaticParams() {
   return caseStudies.map((s) => ({ slug: s.slug }));
@@ -30,7 +32,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${study.title} — Santiago Israelevich UX Portfolio`,
       description: study.summary,
-      images: [`/images/projects/${study.slug}.png`],
+      ...(getCaseImage(study) ? { images: [getCaseImage(study)!] } : {}),
     },
   };
 }
@@ -44,6 +46,7 @@ export default async function CaseStudyPage({
   const study = caseStudies.find((s) => s.slug === slug);
   if (!study) notFound();
 
+  const image = getCaseImage(study);
   const currentIndex = caseStudies.findIndex((s) => s.slug === slug);
   const nextStudy = caseStudies[(currentIndex + 1) % caseStudies.length];
 
@@ -69,9 +72,10 @@ export default async function CaseStudyPage({
       <header className="relative px-6 md:px-12 lg:px-24 pt-16 pb-20 overflow-hidden">
         <div className={`absolute inset-0 bg-gradient-to-br ${study.heroColor}`} />
         {/* Background project image */}
+        {image && (
         <div className="absolute right-0 top-0 h-full w-1/2 opacity-[0.06] pointer-events-none">
           <Image
-            src={`/images/projects/${study.slug}.png`}
+            src={image}
             alt=""
             fill
             className="object-cover object-left-top"
@@ -81,7 +85,12 @@ export default async function CaseStudyPage({
           />
           <div className="absolute inset-0 bg-gradient-to-l from-transparent to-background" />
         </div>
+        )}
         <div className="relative max-w-4xl mx-auto">
+          {study.highlight && (
+            <ToolGridMock className="hidden lg:block absolute right-0 top-0 w-72" />
+          )}
+          <div className={study.highlight ? "lg:pr-[20rem]" : undefined}>
           <div className="flex flex-wrap items-center gap-3 mb-6">
             <Badge variant="secondary">{study.role}</Badge>
             <span className="text-xs text-muted-foreground flex items-center gap-1">
@@ -117,29 +126,53 @@ export default async function CaseStudyPage({
               </span>
             ))}
           </div>
+          </div>
         </div>
       </header>
 
       <main className="px-6 md:px-12 lg:px-24 py-16">
         <div className="max-w-4xl mx-auto space-y-24">
           {/* Overview */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="00" title="Resumen" />
             <p className="text-muted-foreground leading-relaxed">{study.summary}</p>
-          </section>
+          </section></AnimateOnScroll>
 
           {/* Challenge */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="01" title="El desafío" />
+            {study.challengeIntro && (
+              <p className="text-muted-foreground leading-relaxed text-lg mb-6">
+                {study.challengeIntro}
+              </p>
+            )}
+            {study.challengePoints && (
+              <div className="grid md:grid-cols-3 gap-4 mb-8">
+                {study.challengePoints.map((point, i) => (
+                  <div
+                    key={point.title}
+                    className="rounded-xl border border-border/50 bg-zinc-900/50 p-5"
+                  >
+                    <span className="text-xs font-mono text-zinc-600">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="text-sm font-semibold mt-2 mb-1.5">{point.title}</h3>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      {point.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
             <p className="text-muted-foreground leading-relaxed text-lg">
               {study.challenge}
             </p>
-          </section>
+          </section></AnimateOnScroll>
 
           <Separator className="bg-border/30" />
 
           {/* Research */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="02" title="Investigación" />
             <p className="text-muted-foreground leading-relaxed mb-8">
               {study.research.description}
@@ -211,12 +244,12 @@ export default async function CaseStudyPage({
                 />
               </div>
             )}
-          </section>
+          </section></AnimateOnScroll>
 
           <Separator className="bg-border/30" />
 
           {/* Insights */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="03" title="Insights" />
 
             {/* Personas */}
@@ -231,17 +264,27 @@ export default async function CaseStudyPage({
 
             {/* Journey Map */}
             <JourneyMap steps={study.insights.journeyMapSteps} />
-          </section>
+          </section></AnimateOnScroll>
 
           <Separator className="bg-border/30" />
 
           {/* Design */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="04" title="Diseño e iteraciones" />
             <p className="text-muted-foreground leading-relaxed mb-8">
               {study.design.description}
             </p>
 
+            {study.design.indicators ? (
+              <div className="grid grid-cols-3 gap-4 mb-8">
+                {study.design.indicators.map((item) => (
+                  <div key={item.label} className="rounded-xl border border-border/50 bg-zinc-900/50 p-4">
+                    <p className="text-3xl font-bold">{item.value}</p>
+                    <p className="text-xs text-muted-foreground mt-1 leading-snug">{item.label}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
             <div className="flex items-center gap-6 mb-8">
               <div className="text-center">
                 <p className="text-3xl font-bold">{study.design.iterations}</p>
@@ -266,6 +309,7 @@ export default async function CaseStudyPage({
                 </p>
               </div>
             </div>
+            )}
 
             <h3 className="text-sm font-mono text-muted-foreground tracking-wider uppercase mb-4">
               Decisiones clave de diseño
@@ -285,12 +329,23 @@ export default async function CaseStudyPage({
                 </div>
               ))}
             </div>
-          </section>
+
+            {study.design.build && (
+              <div className="mt-8 rounded-xl border border-border/50 bg-gradient-to-br from-zinc-900/70 to-zinc-900/30 p-6">
+                <h3 className="text-sm font-mono text-muted-foreground tracking-wider uppercase mb-3">
+                  {study.design.build.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {study.design.build.body}
+                </p>
+              </div>
+            )}
+          </section></AnimateOnScroll>
 
           <Separator className="bg-border/30" />
 
           {/* Results */}
-          <section>
+          <AnimateOnScroll><section>
             <SectionHeader number="05" title="Resultados" />
 
             {/* Impact Banner */}
@@ -312,6 +367,24 @@ export default async function CaseStudyPage({
 
             <MetricsGrid metrics={study.results.metrics} />
 
+            {study.results.stack && (
+              <div className="mt-8">
+                <h3 className="text-sm font-mono text-muted-foreground tracking-wider uppercase mb-3">
+                  Stack
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {study.results.stack.map((item) => (
+                    <span
+                      key={item}
+                      className="text-xs px-3 py-1.5 rounded-full border border-border/50 text-muted-foreground"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {study.results.testimonial && (
               <blockquote className="mt-8 border-l-2 border-zinc-600 pl-6 py-2">
                 <p className="text-lg italic text-muted-foreground">
@@ -319,10 +392,10 @@ export default async function CaseStudyPage({
                 </p>
               </blockquote>
             )}
-          </section>
+          </section></AnimateOnScroll>
 
           {/* Next case study */}
-          <section className="pt-8">
+          <AnimateOnScroll><section className="pt-8">
             <Separator className="bg-border/30 mb-12" />
             <Link
               href={`/case/${nextStudy.slug}`}
@@ -341,7 +414,7 @@ export default async function CaseStudyPage({
               </div>
               <ArrowLeft className="h-5 w-5 rotate-180 text-muted-foreground group-hover:translate-x-1 transition-transform" />
             </Link>
-          </section>
+          </section></AnimateOnScroll>
         </div>
       </main>
     </div>

@@ -136,3 +136,77 @@
 .scrollbar-none::-webkit-scrollbar {
   display: none;
 }
+
+/* ---------- Motion ---------- */
+@property --hw-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes hw-spin {
+  to {
+    --hw-angle: 360deg;
+  }
+}
+
+.hw-border {
+  padding: 1px;
+  opacity: 0.45;
+  background: conic-gradient(
+    from var(--hw-angle),
+    transparent 0deg,
+    rgba(94, 234, 212, 0.6) 60deg,
+    transparent 130deg,
+    transparent 230deg,
+    rgba(167, 139, 250, 0.55) 300deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  animation: hw-spin 8s linear infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes aurora-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(8rem, -4rem, 0) scale(1.15); }
+}
+@keyframes aurora-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-7rem, 5rem, 0) scale(1.1); }
+}
+@keyframes aurora-c {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(5rem, -6rem, 0) scale(1.2); }
+}
+
+.animate-marquee {
+  animation: marquee 45s linear infinite;
+}
+.marquee:hover .animate-marquee {
+  animation-play-state: paused;
+}
+.animate-aurora-a { animation: aurora-a 16s ease-in-out infinite; }
+.animate-aurora-b { animation: aurora-b 20s ease-in-out infinite; }
+.animate-aurora-c { animation: aurora-c 24s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-aurora-a,
+  .animate-aurora-b,
+  .animate-aurora-c,
+  .hw-border {
+    animation: none;
+  }
+}

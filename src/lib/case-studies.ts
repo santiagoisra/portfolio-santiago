@@ -7,13 +7,30 @@ export interface CaseStudy {
   duration: string;
   url?: string;
   heroColor: string;
+  /** Cover image path. Defaults to /images/projects/<slug>.png; `false` means no image. */
+  image?: string | false;
+  /** Uses the animated, accent-colored card and hero treatment. */
+  highlight?: boolean;
   tags: string[];
   summary: string;
   challenge: string;
+  /** Optional lead-in shown before `challengePoints` (and `challenge` after them). */
+  challengeIntro?: string;
+  challengePoints?: ChallengePoint[];
   research: ResearchSection;
   insights: InsightSection;
   design: DesignSection;
   results: ResultsSection;
+}
+
+export interface ChallengePoint {
+  title: string;
+  description: string;
+}
+
+export function getCaseImage(study: CaseStudy): string | null {
+  if (study.image === false) return null;
+  return study.image ?? `/images/projects/${study.slug}.png`;
 }
 
 export interface ResearchSection {
@@ -43,7 +60,7 @@ export interface Persona {
   quote?: string;
   goals: string[];
   frustrations: string[];
-  techLevel: "bajo" | "medio" | "alto";
+  techLevel: "bajo" | "bajo a medio" | "medio" | "alto";
 }
 
 export interface JourneyStep {
@@ -57,11 +74,15 @@ export interface JourneyStep {
 export interface DesignSection {
   description: string;
   iterations: number;
+  /** Replaces the default iterations / methods / personas counters. */
+  indicators?: { value: string; label: string }[];
   keyDecisions: string[];
+  build?: { title: string; body: string };
 }
 
 export interface ResultsSection {
   metrics: Metric[];
+  stack?: string[];
   testimonial?: string;
 }
 
@@ -73,6 +94,210 @@ export interface Metric {
 }
 
 export const caseStudies: CaseStudy[] = [
+  {
+    slug: "herramientas-web",
+    title: "Herramientas Web",
+    subtitle:
+      "Más de 150 herramientas gratuitas que funcionan en tu navegador: tus archivos nunca salen de tu dispositivo.",
+    role: "Product designer & product owner",
+    year: "2026",
+    duration: "En producción · herramientas-web.com",
+    url: "https://herramientas-web.com",
+    heroColor: "from-teal-500/20 to-violet-500/10",
+    highlight: true,
+    tags: [
+      "Privacy by design",
+      "Web App",
+      "SEO",
+      "i18n (ES/EN)",
+      "Accesibilidad",
+      "Juegos",
+      "Desarrollo con agentes de IA",
+    ],
+    summary:
+      "Herramientas Web es una plataforma de utilidades de uso diario —editores de PDF, compresor y conversor de imágenes, calculadoras, herramientas de texto, utilidades para desarrolladores, secciones por país y minijuegos— gratis para siempre y sin registro. Todo el procesamiento ocurre en el navegador del usuario: los archivos no se suben a ningún servidor. El modelo de negocio es publicidad no invasiva. Se diseñó y construyó en dos semanas como producto propio, dirigiendo un equipo de agentes de IA con revisión cruzada entre modelos.",
+    challengeIntro:
+      "Los sitios de herramientas online más usados tienen tres problemas en común:",
+    challenge:
+      "El desafío era ofrecer la misma variedad que los líderes del rubro sin ninguno de estos costos para el usuario, y hacerlo sostenible solo con publicidad no invasiva, lo que exige mucho tráfico orgánico: SEO, velocidad y razones para volver.",
+    challengePoints: [
+      {
+        title: "Privacidad",
+        description:
+          "Suben los archivos (contratos, DNI, fotos) a servidores de terceros para procesarlos.",
+      },
+      {
+        title: "Fricción",
+        description:
+          "Piden registro, ponen límites diarios o marcas de agua y empujan a un plan pago.",
+      },
+      {
+        title: "Publicidad invasiva",
+        description:
+          "Pantallas completas, descargas falsas y anuncios que tapan la herramienta.",
+      },
+    ],
+    research: {
+      methods: [
+        "Benchmark contra el líder del rubro (rúbrica de 8 dimensiones)",
+        "Auditoría de productos de referencia (ej. Squoosh)",
+        "Análisis heurístico y auditorías globales de UX, SEO/performance y accesibilidad",
+        "Pruebas end-to-end con Playwright (celular y escritorio, claro y oscuro)",
+        "Cloudflare Web Analytics y Google Search Console",
+      ],
+      description:
+        "Partimos de una restricción dura —todo tiene que funcionar sin servidor— y de un referente claro del mercado (tinywow). Cada herramienta se evaluó con una rúbrica propia de 8 dimensiones: solo se aprobaba si igualaba o superaba al referente en todas y promediaba 8,5 o más. Las auditorías globales las hizo un modelo distinto al que construyó.",
+      findings: [
+        {
+          title: "La privacidad es el diferencial",
+          description:
+            "La competencia procesa en servidor; hacerlo en el navegador elimina el riesgo de filtrar documentos y abarata la operación (sin costo por archivo procesado).",
+          severity: "critical",
+        },
+        {
+          title: "Sin tráfico no hay modelo",
+          description:
+            "Google AdSense rechazó la primera solicitud por «contenido de poco valor»: 622 páginas variantes muy parecidas diluían la calidad percibida del sitio.",
+          severity: "critical",
+        },
+        {
+          title: "El celular manda",
+          description:
+            "Se encontraron 3.757 controles con área táctil menor a 44 px en 159 páginas.",
+          severity: "high",
+        },
+        {
+          title: "Las utilidades no generan regreso",
+          description:
+            "Una calculadora se usa y se cierra; hacía falta un motivo para volver y para compartir.",
+          severity: "high",
+        },
+      ],
+    },
+    insights: {
+      personas: [
+        {
+          name: "Administrativo/a o contador/a",
+          occupation: "Trabajo administrativo y contable",
+          goals: [
+            "Unir y comprimir PDF",
+            "Calcular IVA, cuotas, aguinaldo y días hábiles rápido y sin instalar nada",
+          ],
+          frustrations: [
+            "Subir documentos de clientes a sitios desconocidos",
+            "Límites diarios y registros",
+          ],
+          techLevel: "medio",
+        },
+        {
+          name: "Usuario/a ocasional desde el celular",
+          occupation: "Uso puntual desde el teléfono",
+          goals: [
+            "Achicar una foto para mandarla",
+            "Pasar un PDF a imagen",
+            "Limpiar un texto copiado",
+          ],
+          frustrations: [
+            "Anuncios que tapan la herramienta",
+            "Botones chicos",
+            "Descargas confusas",
+          ],
+          techLevel: "bajo",
+        },
+        {
+          name: "Persona que busca un pasatiempo corto",
+          occupation: "Jugadores casuales",
+          goals: ["Jugar unos minutos", "Desafiar a un amigo"],
+          frustrations: [
+            "Juegos que piden cuenta",
+            "Juegos llenos de publicidad",
+          ],
+          techLevel: "bajo a medio",
+        },
+      ],
+      journeyMapSteps: [
+        {
+          phase: "Búsqueda",
+          action:
+            "Encuentra la herramienta en Google: página dedicada, en su idioma y país",
+          emotion: "neutral",
+        },
+        {
+          phase: "Llegada",
+          action:
+            "La herramienta está arriba de todo, sin registro ni pantallas intermedias",
+          emotion: "positiva",
+        },
+        {
+          phase: "Carga del archivo",
+          action: "Suelta el archivo y ve que «no se sube a ningún servidor»",
+          emotion: "positiva",
+        },
+        {
+          phase: "Ajuste",
+          action:
+            "Cambia opciones con vista previa al instante (el compresor con antes/después estilo Squoosh)",
+          emotion: "positiva",
+        },
+        {
+          phase: "Resultado",
+          action: "Ve el ahorro o el cambio aplicado antes de descargar",
+          emotion: "positiva",
+        },
+        {
+          phase: "Descarga / compartir",
+          action:
+            "Descarga, o en los juegos comparte un reto por link",
+          emotion: "positiva",
+        },
+      ],
+    },
+    design: {
+      description:
+        "El sistema visual es una «mesa de trabajo de precisión»: neutros grafito, un único acento cobalto, modo oscuro, tipografía Geist y nada de colores por categoría, para que la herramienta sea la protagonista. Dentro de los juegos se permite una paleta propia.",
+      iterations: 4,
+      indicators: [
+        { value: "16", label: "lotes de herramientas, con hasta 4 rondas de revisión cada uno" },
+        { value: "8", label: "dimensiones en la rúbrica contra el líder del rubro" },
+        { value: "2", label: "idiomas completos (ES / EN) y secciones por país (Argentina, España)" },
+      ],
+      keyDecisions: [
+        "Procesamiento 100 % en el navegador. Sin backend para las herramientas: privacidad por diseño y costo de operación casi nulo (Astro estático en Cloudflare Pages).",
+        "Sin registro y gratis para siempre. La promesa del sitio; la monetización es solo publicidad no invasiva en espacios reservados.",
+        "Calidad antes que cantidad para el buscador. Tras el rechazo de AdSense se sacaron del índice 622 variantes (de 993 a 345 páginas indexables) y se escribieron guías propias para cada una de las 19 categorías.",
+        "Accesibilidad táctil. Todas las áreas táctiles a 44 px: de 3.757 controles chicos a 0, con un test que lo vigila.",
+        "Juegos con retos por link para crecer. 17 juegos permiten desafiar a un amigo a la misma partida (misma semilla) con una tarjeta para compartir; la invitación aparece sola después de una buena partida. Compartir se adaptó a cada plataforma: Instagram en el celular (tarjeta + link copiado) y Facebook en la computadora.",
+        "Honestidad en los mensajes. Por ejemplo, «Limpiar texto» quita los caracteres ocultos de textos de IA, pero aclara que la marca de agua estadística de algunos modelos no se puede quitar.",
+        "Mantenimiento visible. Página de Novedades con RSS: cada mejora publicada queda registrada.",
+      ],
+      build: {
+        title: "Cómo se construyó",
+        body: "Trabajé como product owner y director: definí alcance, criterios de calidad y prioridades, y probé cada entrega en mi teléfono. El desarrollo lo hicieron agentes de IA (Claude) en paralelo, cada uno en su copia del repositorio, y otro modelo distinto revisó cada lote con la rúbrica. Más de 4.000 pruebas automatizadas sostienen la calidad. Ejemplo de iteración: el Carpincho Cruza pasó de 2D a 3D (three.js) en una noche: prototipo, aprobación en el iPhone, implementación completa y ajuste fino de la experiencia.",
+      },
+    },
+    results: {
+      metrics: [
+        { label: "Herramientas y juegos publicados", after: "150+" },
+        { label: "Archivos enviados a un servidor", after: "0" },
+        { label: "Idiomas", after: "ES / EN" },
+        { label: "Pruebas automatizadas", after: "4.000+" },
+        { label: "Juegos con retos por link", after: "17" },
+        { label: "Auditoría global de UX (sobre 10)", after: "8,5" },
+        { label: "Auditoría global de SEO y performance (sobre 10)", after: "9,8" },
+        { label: "Auditoría global de accesibilidad (sobre 10)", after: "9" },
+      ],
+      stack: [
+        "Astro",
+        "TypeScript",
+        "Cloudflare Pages",
+        "Cloudflare Workers",
+        "Durable Objects",
+        "Turnstile",
+        "three.js",
+        "Playwright",
+      ],
+    },
+  },
   {
     slug: "nitidoc",
     title: "Nitidoc",

@@ -1,11 +1,39 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Mail, ExternalLink } from "lucide-react";
-import { caseStudies } from "@/lib/case-studies";
+import { caseStudies, getCaseImage } from "@/lib/case-studies";
 import { secondaryProjects } from "@/lib/secondary-projects";
 import { Badge } from "@/components/ui/badge";
 import { AnimateOnScroll } from "@/components/animate-on-scroll";
+import { AnimatedCounter } from "@/components/animated-counter";
 import { HeroAnimation } from "@/components/hero-animation";
+import { HeroBackground } from "@/components/hero-background";
+import { RevealText } from "@/components/reveal-text";
+import { Float } from "@/components/float";
+import { Magnetic } from "@/components/magnetic";
+import { Marquee } from "@/components/marquee";
+import { SpotlightCard } from "@/components/spotlight-card";
+import { ProcessTimeline } from "@/components/process-timeline";
+import { ToolGridMock } from "@/components/tool-grid-mock";
+
+const skills = [
+  "Investigación",
+  "Entrevistas",
+  "Heatmaps",
+  "Análisis heurístico",
+  "Benchmarking",
+  "Personas",
+  "Journey maps",
+];
+const craft = [
+  "Wireframes",
+  "Prototipos",
+  "Sistemas de diseño",
+  "Tests de usabilidad",
+  "Métricas SUS",
+  "Clarity",
+  "Fintech UX",
+];
 
 export default function Home() {
   return (
@@ -13,31 +41,10 @@ export default function Home() {
       {/* Hero */}
       <header className="relative px-6 pt-0 pb-36 md:px-12 lg:px-24 overflow-hidden min-h-[85vh] flex flex-col justify-center">
         <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-background to-zinc-950" />
-
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-[0.02]">
-          <svg width="100%" height="100%">
-            <defs>
-              <pattern
-                id="hero-grid"
-                width="60"
-                height="60"
-                patternUnits="userSpaceOnUse"
-              >
-                <path
-                  d="M 60 0 L 0 0 0 60"
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="0.5"
-                />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#hero-grid)" />
-          </svg>
-        </div>
+        <HeroBackground />
 
         {/* Profile photo — infinite drop from top, aligned to content max-w */}
-        <div className="hidden md:block absolute top-0 right-0 z-10" style={{ width: "220px", marginRight: "calc((100vw - 64rem) / 2)" }}>
+        <Float className="hidden md:block absolute top-0 right-0 z-10" style={{ width: "220px", marginRight: "calc((100vw - 64rem) / 2)" }}>
           <div className="relative" style={{ marginTop: "-200px", paddingTop: "200px" }}>
             <div
               className="relative w-full overflow-hidden"
@@ -62,8 +69,8 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="absolute -inset-8 bottom-0 rounded-b-full bg-gradient-to-b from-transparent to-zinc-400/8 blur-3xl -z-10" />
-        </div>
+          <div className="absolute -inset-8 bottom-0 rounded-b-full bg-gradient-to-b from-transparent to-teal-300/10 blur-3xl -z-10" />
+        </Float>
 
         <div className="relative max-w-5xl mx-auto w-full mt-8 md:mt-24">
           <HeroAnimation>
@@ -71,9 +78,13 @@ export default function Home() {
               Portfolio UX
             </p>
             <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight leading-[0.9] mb-8">
-              Santiago
+              <RevealText text="Santiago" delay={0.3} />
               <br />
-              <span className="text-muted-foreground">Israelevich</span>
+              <RevealText
+                text="Israelevich"
+                delay={0.65}
+                className="text-muted-foreground"
+              />
             </h1>
             <div className="max-w-xl mt-8">
               <p className="text-lg md:text-xl text-zinc-400 leading-relaxed">
@@ -86,14 +97,17 @@ export default function Home() {
               </p>
             </div>
             <div className="flex items-center gap-5 mt-10">
-              <a
-                href="mailto:santiagoisra@gmail.com"
-                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
-              >
-                <Mail className="h-4 w-4" />
-                santiagoisra@gmail.com
-              </a>
+              <Magnetic>
+                <a
+                  href="mailto:santiagoisra@gmail.com"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                >
+                  <Mail className="h-4 w-4" />
+                  santiagoisra@gmail.com
+                </a>
+              </Magnetic>
               <span className="text-zinc-700">|</span>
+              <Magnetic>
               <a
                 href="https://www.linkedin.com/in/santiagoisra/"
                 target="_blank"
@@ -109,6 +123,7 @@ export default function Home() {
                 </svg>
                 LinkedIn
               </a>
+              </Magnetic>
             </div>
           </HeroAnimation>
         </div>
@@ -118,12 +133,36 @@ export default function Home() {
           <span className="text-[10px] font-mono tracking-widest uppercase">
             Scroll
           </span>
-          <div className="w-px h-8 bg-gradient-to-b from-zinc-600 to-transparent animate-pulse" />
+          <div className="w-px h-8 bg-gradient-to-b from-zinc-500 to-transparent animate-bounce" />
         </div>
       </header>
 
+      {/* Skills marquee + stats */}
+      <section aria-label="Especialidades" className="relative pt-4 pb-20 space-y-4">
+        <Marquee items={skills} />
+        <Marquee items={craft} reverse />
+        <div className="px-6 md:px-12 lg:px-24 pt-10">
+          <dl className="max-w-5xl mx-auto grid grid-cols-3 gap-4 text-center md:text-left">
+            {[
+              { end: caseStudies.length, suffix: "", label: "Case studies" },
+              { end: secondaryProjects.length, suffix: "", label: "Proyectos web" },
+              { end: 150, suffix: "+", label: "Herramientas online propias" },
+            ].map((stat) => (
+              <AnimateOnScroll key={stat.label}>
+                <dd className="text-3xl md:text-5xl font-bold tracking-tight">
+                  <AnimatedCounter end={stat.end} suffix={stat.suffix} />
+                </dd>
+                <dt className="mt-1 text-xs font-mono uppercase tracking-widest text-muted-foreground">
+                  {stat.label}
+                </dt>
+              </AnimateOnScroll>
+            ))}
+          </dl>
+        </div>
+      </section>
+
       {/* Case Studies */}
-      <main className="px-6 md:px-12 lg:px-24 -mt-16">
+      <main className="px-6 md:px-12 lg:px-24">
         <div className="max-w-5xl mx-auto">
           <AnimateOnScroll>
             <p className="text-xs font-mono text-muted-foreground tracking-widest uppercase mb-6">
@@ -131,26 +170,41 @@ export default function Home() {
             </p>
           </AnimateOnScroll>
           <div className="grid gap-6">
-            {caseStudies.map((study, index) => (
+            {caseStudies.map((study, index) => {
+              const image = getCaseImage(study);
+              return (
               <AnimateOnScroll key={study.slug} delay={index * 100}>
+                <SpotlightCard
+                  tilt={1.2}
+                  glow={study.highlight ? "rgba(94, 234, 212, 0.09)" : undefined}
+                >
                 <Link
                   href={`/case/${study.slug}`}
-                  className="group relative block overflow-hidden rounded-xl border border-border/50 bg-card hover:border-border transition-all duration-300 hover:shadow-xl hover:shadow-black/30 cursor-pointer"
+                  className={`group relative block overflow-hidden rounded-xl border bg-card hover:border-border transition-all duration-300 hover:shadow-xl hover:shadow-black/30 cursor-pointer ${
+                    study.highlight ? "border-teal-400/20 hover:border-teal-400/40" : "border-border/50"
+                  }`}
                 >
+                  {study.highlight && (
+                    <div aria-hidden="true" className="hw-border pointer-events-none absolute -inset-px rounded-[inherit]" />
+                  )}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-br ${study.heroColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+                    className={`absolute inset-0 bg-gradient-to-br ${study.heroColor} transition-opacity duration-500 ${
+                      study.highlight ? "opacity-60 group-hover:opacity-100" : "opacity-0 group-hover:opacity-100"
+                    }`}
                   />
-                  <div className="absolute right-0 top-0 h-full w-2/5 opacity-0 group-hover:opacity-[0.12] transition-opacity duration-500 pointer-events-none">
-                    <Image
-                      src={`/images/projects/${study.slug}.png`}
-                      alt=""
-                      fill
-                      className="object-cover object-left-top"
-                      sizes="40vw"
-                      aria-hidden="true"
-                      unoptimized
-                    />
-                  </div>
+                  {image && (
+                    <div className="absolute right-0 top-0 h-full w-2/5 opacity-0 group-hover:opacity-[0.12] transition-opacity duration-500 pointer-events-none">
+                      <Image
+                        src={image}
+                        alt=""
+                        fill
+                        className="object-cover object-left-top"
+                        sizes="40vw"
+                        aria-hidden="true"
+                        unoptimized
+                      />
+                    </div>
+                  )}
                   <div className="relative p-8 md:p-10">
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
                       <div className="flex-1">
@@ -182,6 +236,9 @@ export default function Home() {
                           ))}
                         </div>
                       </div>
+                      {study.highlight && (
+                        <ToolGridMock className="hidden lg:block w-72 shrink-0" />
+                      )}
                       <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-foreground transition-colors shrink-0">
                         Ver caso
                         <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -189,8 +246,10 @@ export default function Home() {
                     </div>
                   </div>
                 </Link>
+                </SpotlightCard>
               </AnimateOnScroll>
-            ))}
+              );
+            })}
           </div>
         </div>
       </main>
@@ -205,8 +264,9 @@ export default function Home() {
           </AnimateOnScroll>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
             {secondaryProjects.map((project, i) => (
-              <AnimateOnScroll key={project.title} delay={i * 60}>
-                <div className="group rounded-lg border border-border/30 bg-zinc-900/30 p-5 hover:border-border/60 hover:bg-zinc-900/50 transition-all cursor-default h-full">
+              <AnimateOnScroll key={project.title} delay={(i % 3) * 80} className="h-full">
+                <SpotlightCard tilt={4} className="h-full rounded-lg">
+                <div className="group rounded-lg border border-border/30 bg-zinc-900/30 p-5 hover:border-border/60 hover:bg-zinc-900/50 hover:-translate-y-0.5 transition-all cursor-default h-full">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-sm font-semibold">{project.title}</h3>
                     <span className="text-[10px] text-muted-foreground font-mono">
@@ -239,6 +299,7 @@ export default function Home() {
                     )}
                   </div>
                 </div>
+                </SpotlightCard>
               </AnimateOnScroll>
             ))}
           </div>
@@ -253,28 +314,7 @@ export default function Home() {
               Proceso
             </h2>
           </AnimateOnScroll>
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { step: "01", title: "Research", desc: "Entrevistas, heatmaps, análisis heurístico, benchmarking. Entender antes de diseñar." },
-              { step: "02", title: "Insights", desc: "Personas, journey maps, hallazgos clave. Convertir datos en direcciones de diseño." },
-              { step: "03", title: "Diseño", desc: "Wireframes, prototipos, sistemas de diseño. Iterar con el equipo y los usuarios." },
-              { step: "04", title: "Validación", desc: "Tests de usabilidad, métricas SUS, Clarity. Medir el impacto real de cada decisión." },
-            ].map((item, i) => (
-              <AnimateOnScroll key={item.step} delay={i * 120}>
-                <div className="group cursor-default">
-                  <span className="text-4xl font-bold text-zinc-800 group-hover:text-zinc-600 transition-colors duration-300">
-                    {item.step}
-                  </span>
-                  <h3 className="text-lg font-semibold mt-4 mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-zinc-400 leading-relaxed">
-                    {item.desc}
-                  </p>
-                </div>
-              </AnimateOnScroll>
-            ))}
-          </div>
+          <ProcessTimeline />
         </div>
       </section>
 
