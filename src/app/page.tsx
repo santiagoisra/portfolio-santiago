@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, Mail, ExternalLink } from "lucide-react";
-import { caseStudies } from "@/lib/case-studies";
+import { caseStudies, getCaseImage } from "@/lib/case-studies";
 import { secondaryProjects } from "@/lib/secondary-projects";
 import { Badge } from "@/components/ui/badge";
 import { AnimateOnScroll } from "@/components/animate-on-scroll";
@@ -14,7 +14,7 @@ import { Magnetic } from "@/components/magnetic";
 import { Marquee } from "@/components/marquee";
 import { SpotlightCard } from "@/components/spotlight-card";
 import { ProcessTimeline } from "@/components/process-timeline";
-import { HerramientasWebShowcase } from "@/components/herramientas-web-showcase";
+import { ToolGridMock } from "@/components/tool-grid-mock";
 
 const skills = [
   "Investigación",
@@ -170,27 +170,41 @@ export default function Home() {
             </p>
           </AnimateOnScroll>
           <div className="grid gap-6">
-            {caseStudies.map((study, index) => (
+            {caseStudies.map((study, index) => {
+              const image = getCaseImage(study);
+              return (
               <AnimateOnScroll key={study.slug} delay={index * 100}>
-                <SpotlightCard tilt={1.2}>
+                <SpotlightCard
+                  tilt={1.2}
+                  glow={study.highlight ? "rgba(94, 234, 212, 0.09)" : undefined}
+                >
                 <Link
                   href={`/case/${study.slug}`}
-                  className="group relative block overflow-hidden rounded-xl border border-border/50 bg-card hover:border-border transition-all duration-300 hover:shadow-xl hover:shadow-black/30 cursor-pointer"
+                  className={`group relative block overflow-hidden rounded-xl border bg-card hover:border-border transition-all duration-300 hover:shadow-xl hover:shadow-black/30 cursor-pointer ${
+                    study.highlight ? "border-teal-400/20 hover:border-teal-400/40" : "border-border/50"
+                  }`}
                 >
+                  {study.highlight && (
+                    <div aria-hidden="true" className="hw-border pointer-events-none absolute -inset-px rounded-[inherit]" />
+                  )}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-br ${study.heroColor} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+                    className={`absolute inset-0 bg-gradient-to-br ${study.heroColor} transition-opacity duration-500 ${
+                      study.highlight ? "opacity-60 group-hover:opacity-100" : "opacity-0 group-hover:opacity-100"
+                    }`}
                   />
-                  <div className="absolute right-0 top-0 h-full w-2/5 opacity-0 group-hover:opacity-[0.12] transition-opacity duration-500 pointer-events-none">
-                    <Image
-                      src={`/images/projects/${study.slug}.png`}
-                      alt=""
-                      fill
-                      className="object-cover object-left-top"
-                      sizes="40vw"
-                      aria-hidden="true"
-                      unoptimized
-                    />
-                  </div>
+                  {image && (
+                    <div className="absolute right-0 top-0 h-full w-2/5 opacity-0 group-hover:opacity-[0.12] transition-opacity duration-500 pointer-events-none">
+                      <Image
+                        src={image}
+                        alt=""
+                        fill
+                        className="object-cover object-left-top"
+                        sizes="40vw"
+                        aria-hidden="true"
+                        unoptimized
+                      />
+                    </div>
+                  )}
                   <div className="relative p-8 md:p-10">
                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
                       <div className="flex-1">
@@ -222,6 +236,9 @@ export default function Home() {
                           ))}
                         </div>
                       </div>
+                      {study.highlight && (
+                        <ToolGridMock className="hidden lg:block w-72 shrink-0" />
+                      )}
                       <div className="flex items-center gap-2 text-sm text-muted-foreground group-hover:text-foreground transition-colors shrink-0">
                         Ver caso
                         <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -231,24 +248,11 @@ export default function Home() {
                 </Link>
                 </SpotlightCard>
               </AnimateOnScroll>
-            ))}
+              );
+            })}
           </div>
         </div>
       </main>
-
-      {/* Own product: Herramientas Web */}
-      <section className="px-6 md:px-12 lg:px-24 pt-28">
-        <div className="max-w-5xl mx-auto">
-          <AnimateOnScroll>
-            <h2 className="text-xs font-mono text-muted-foreground tracking-widest uppercase mb-6">
-              Proyecto propio
-            </h2>
-          </AnimateOnScroll>
-          <AnimateOnScroll>
-            <HerramientasWebShowcase />
-          </AnimateOnScroll>
-        </div>
-      </section>
 
       {/* Secondary Projects */}
       <section className="px-6 md:px-12 lg:px-24 py-28">
